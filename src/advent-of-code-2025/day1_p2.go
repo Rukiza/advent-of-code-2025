@@ -45,18 +45,18 @@ func rotateDial(dial int64, rotation string, count int64) (int64, int64) {
 	case "R":
 		tmp := (dial + count) % 100
 		amount := count / 100
+		diff := count % 100
 		if dial == 0 {
-		} else if count%100 == 0 {
-		} else if tmp <= dial {
+		} else if dial+diff >= 100 {
 			amount = amount + 1
 		}
 		return tmp, amount
 	case "L":
 		tmp := (dial - count) % 100
 		amount := count / 100
+		diff := count % 100
 		if dial == 0 {
-		} else if count%100 == 0 {
-		} else if tmp <= 0 {
+		} else if dial-diff <= 0 {
 			amount++
 		}
 		if tmp < 0 {
