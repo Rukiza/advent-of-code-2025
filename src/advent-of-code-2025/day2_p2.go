@@ -52,6 +52,7 @@ func main() {
 func invalidId(id int64) int64 {
 	sid := strconv.FormatInt(id, 10)
 
+	// fmt.Println(sid)
 	// If you cant half something why bother.
 	i := 1
 	for i <= len(sid) {
@@ -72,14 +73,17 @@ func invalidId(id int64) int64 {
 			i++
 			continue
 		}
+		// fmt.Println(prev)
+		// Look through the rest .. good good
 		for j*step <= len(sid) {
 			toCheck := sid[step*(j-1) : step*j]
+			// fmt.Println(toCheck)
 			if prev != toCheck {
 				allMatch = false
 			}
 			j++
 		}
-
+		// fmt.Println(allMatch)
 		if allMatch {
 			// We just return the value found ... good job
 			return id
