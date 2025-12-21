@@ -63,10 +63,9 @@ func invalidId(id int64) int64 {
 		// Get each step
 		step := len(sid) / i
 
-		j := 2
+		j := 2 // Skip 1 due to prev
 		prev := sid[:step]
 		allMatch := true
-		// fmt.Println(prev)
 
 		// Would just mean step is length
 		if j*step > len(sid) {
@@ -75,7 +74,6 @@ func invalidId(id int64) int64 {
 		}
 		for j*step <= len(sid) {
 			toCheck := sid[step*(j-1) : step*j]
-			// fmt.Println(toCheck)
 			if prev != toCheck {
 				allMatch = false
 			}
@@ -83,12 +81,8 @@ func invalidId(id int64) int64 {
 		}
 
 		if allMatch {
-			v, err := strconv.ParseInt(sid, 10, 64)
-			if err != nil {
-				log.Fatal(err)
-			}
-			fmt.Println(sid)
-			return v
+			// We just return the value found ... good job
+			return id
 		}
 
 		i++
