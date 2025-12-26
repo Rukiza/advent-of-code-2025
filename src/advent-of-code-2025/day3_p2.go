@@ -2,15 +2,17 @@ package main
 
 import (
 	"bufio"
+	"container/list"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	file, err := os.Open("data/day3.txt")
+	file, err := os.Open("data/day3-test.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -34,45 +36,44 @@ func main() {
 func findMeBigNumber(text string) int64 {
 	l := strings.Split(strings.TrimSpace(text), "")
 
-	i := 1
-	current, err := strconv.ParseInt(l[0], 10, 64)
-	bestIndex := 0
-	if err != nil {
-		log.Fatal(err)
-	}
+	numbers := list.New()
+
+	numberln := 12
 
 	// Find largest except the end value
-	for i < len(l)-1 {
-		temp, err := strconv.ParseInt(l[i], 10, 64)
+	currentStrIndexStart := 0
+	for numbers.Len() < numberln {
+		bestIndex := currentStrIndexStart
+		i := currentStrIndexStart
+		current, err := strconv.ParseInt(l[currentStrIndexStart], 10, 64)
 		if err != nil {
 			log.Fatal(err)
 		}
-		if current < temp {
-			current = temp
-			bestIndex = i
+		for i < len(l)-(numberln-numbers.Len())+1 {
+			temp, err := strconv.ParseInt(l[i], 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if current < temp {
+				current = temp
+				bestIndex = i
+			}
+			i++
 		}
-		i++
+		numbers.PushBack(current)
+		currentStrIndexStart = bestIndex + 1
 	}
 
-	// Find largest value using current as start
-	secondBest := bestIndex + 1
-	j := secondBest + 1
-	current2, err := strconv.ParseInt(l[secondBest], 10, 64)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for j < len(l) {
-		temp, err := strconv.ParseInt(l[j], 10, 64)
-		if err != nil {
-			log.Fatal(err)
-		}
-		if current2 < temp {
-			current2 = temp
-			secondBest = j
-		}
+	// fmt.Println(v)
+	var j int64 = 0
+	var total int64 = 0
+	value := numbers.Front()
+	for j < int64(numbers.Len()) {
+		fmt.Print(value.Value)
+		total = total + value.Value.(int64)*int64(math.Pow(10, float64(int64(numbers.Len())-j-1)))
+		value = value.Next()
 		j++
 	}
-	// v := current*10 + current2
-	// fmt.Println(v)
-	return current*10 + current2
+	fmt.Println("")
+	return total
 }
